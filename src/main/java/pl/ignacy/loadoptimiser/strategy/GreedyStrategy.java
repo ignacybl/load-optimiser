@@ -13,25 +13,6 @@ import java.util.Map;
 public class GreedyStrategy implements LoadOptimiserStrategy{
     @Override
     public Map<Vehicle, List<Package>> calculateLoad(List<Vehicle> vehicles, List<Package> packages) {
-        Map<Vehicle, List<Package>> assignments = new HashMap<>();
-
-        for (Vehicle v : vehicles) {
-            assignments.put(v, new ArrayList<>());
-        }
-        for (Package pack : packages) {
-            for (Vehicle vehicle : vehicles) {
-                double currentWeight = assignments.get(vehicle).stream()
-                        .mapToDouble(Package::getWeight).sum();
-                double currentVolume = assignments.get(vehicle).stream()
-                        .mapToDouble(Package::getVolume).sum();
-                if (currentWeight + pack.getWeight() <= vehicle.getMaxWeight() && currentVolume + pack.getVolume() <= vehicle.getMaxVolume()) {
-                    assignments.get(vehicle).add(pack);
-                    break;
-                }
-            }
-
-        }
-        return assignments;
+        return PackageAssignmentHelper.assignPackagesToVehicles(vehicles, packages);
     }
-
 }

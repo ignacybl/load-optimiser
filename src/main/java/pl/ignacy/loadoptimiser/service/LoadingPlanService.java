@@ -36,15 +36,18 @@ public class LoadingPlanService {
         LoadOptimiserStrategy strategy = strategies.get(type);
 
         if(strategy == null){
-            throw new IllegalArgumentException("Nieznana strategia " + type);
+            log.warn("UNKNOWN STRATEGY");
+            throw new IllegalArgumentException("Unknown strategy:  " + type);
         }
 
         List<Vehicle> vehicles = vehicleRepository.findAllById(request.vehicleIds());
         List<Package> availablePackages = packageRepository.findAllById(request.packagesIds())
                 .stream().filter(pkg -> pkg.getLoadingPlan() == null).toList();
 
+        if(availablePackages.isEmpty()) return List.of();
+
         if(availablePackages.size() < request.packagesIds().size()){
-            log.warn("SOME PACKAGES MIGHT HAVE BEEN SKIPPED");
+            log.warn("SOME PACKAGES MIGHT HAVE BEEN SKIPPED:)");
         }
 
         Map<Vehicle, List<Package>> result = strategy.calculateLoad(vehicles, availablePackages);
