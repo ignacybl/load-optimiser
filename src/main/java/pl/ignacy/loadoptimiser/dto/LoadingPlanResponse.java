@@ -7,5 +7,5 @@ import java.util.List;
 
 public record LoadingPlanResponse(Long id, String plateNumber,
                                   VehicleType vehicleType, List<PackageResponse> packages,
-                                  double totalWeight, double totalVolume, LocalDateTime createdAt) {
+                                  double totalWeight, double totalVolume, double weightFillPercentage, double volumeFillPercentage, LocalDateTime createdAt) {
 }

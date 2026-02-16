@@ -13,6 +13,8 @@ public interface LoadingPlanMapper {
     @Mapping(target = "vehicleType", source = "vehicle.vehicleType")
     @Mapping(target = "totalWeight", expression = "java(calculateTotalWeight(entity))")
     @Mapping(target = "totalVolume", expression = "java(calculateTotalVolume(entity))")
+    @Mapping(target = "weightFillPercentage", expression = "java(calculateWeightFill(entity))")
+    @Mapping(target = "volumeFillPercentage", expression = "java(calculateVolumeFill(entity))")
     LoadingPlanResponse toResponse(LoadingPlan entity);
 
     default double calculateTotalWeight(LoadingPlan entity) {
@@ -27,5 +29,19 @@ public interface LoadingPlanMapper {
         return entity.getPackages().stream()
                 .mapToDouble(Package::getVolume)
                 .sum();
+    }
+
+    default double calculateWeightFill(LoadingPlan entity) {
+        if (entity.getVehicle() == null || entity.getVehicle().getMaxWeight() <= 0) return 0.0;
+        double total = calculateTotalWeight(entity);
+        double percentage = (total / entity.getVehicle().getMaxWeight()) * 100;
+        return Math.round(percentage * 100.0) / 100.0;
+    }
+
+    default double calculateVolumeFill(LoadingPlan entity) {
+        if (entity.getVehicle() == null || entity.getVehicle().getMaxVolume() <= 0) return 0.0;
+        double total = calculateTotalVolume(entity);
+        double percentage = (total / entity.getVehicle().getMaxVolume()) * 100;
+        return Math.round(percentage * 100.0) / 100.0;
     }
 }

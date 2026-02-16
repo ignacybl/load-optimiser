@@ -1,9 +1,14 @@
 package pl.ignacy.loadoptimiser.service;
 
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import pl.ignacy.loadoptimiser.controller.LoadingPlanController;
 import pl.ignacy.loadoptimiser.dto.LoadingPlanRequest;
 import pl.ignacy.loadoptimiser.dto.LoadingPlanResponse;
 import pl.ignacy.loadoptimiser.entity.LoadingPlan;
@@ -71,5 +76,11 @@ public class LoadingPlanService {
         return savedPlans.stream()
                 .map(loadingPlanMapper::toResponse)
                 .toList();
+    }
+    public LoadingPlanResponse getPlanById(Long id){
+        return loadingPlanRepository.findById(id).map(loadingPlanMapper::toResponse).orElseThrow(() -> new EntityNotFoundException("Plan " + id + " does not exist"));
+    }
+    public Page<LoadingPlanResponse> getAllPlans(){
+        return loadingPlanRepository.findAll(PageRequest.of(0,10)).map(loadingPlanMapper::toResponse);
     }
 }
