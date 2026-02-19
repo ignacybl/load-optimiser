@@ -93,6 +93,14 @@ public class LoadingPlanServiceTest {
                     .isInstanceOf(IllegalArgumentException.class)
                     .hasMessageContaining("Unknown strategy");
         }
+        @Test
+        void shouldThrowWhenVehicleMissing(){
+
+            when(vehicleRepository.findAllById(any())).thenReturn(List.of());
+            LoadingPlanRequest request = new LoadingPlanRequest(List.of(1L), List.of(), "greedy");
+            assertThatThrownBy(() -> service.createPlan(request))
+                    .isInstanceOf(EntityNotFoundException.class);
+        }
 
         @Test
         void shouldUseGreedyWhenStrategyNull() {

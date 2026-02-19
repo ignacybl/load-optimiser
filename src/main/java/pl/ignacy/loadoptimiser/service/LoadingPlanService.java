@@ -46,6 +46,9 @@ public class LoadingPlanService {
         }
 
         List<Vehicle> vehicles = vehicleRepository.findAllById(request.vehicleIds());
+        if(vehicles.size() != request.vehicleIds().size()){
+            throw new EntityNotFoundException("One or more vehicles not found");
+        }
         List<Package> availablePackages = packageRepository.findAllById(request.packagesIds())
                 .stream().filter(pkg -> pkg.getLoadingPlan() == null).toList();
 
