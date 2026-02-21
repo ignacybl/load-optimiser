@@ -3,6 +3,8 @@ package pl.ignacy.loadoptimiser.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,8 +27,8 @@ public class LoadingPlanController {
     }
 
     @GetMapping("/plan-loads")
-    public ResponseEntity<Page<LoadingPlanResponse>> getPlans(){
-        return ResponseEntity.ok(loadingPlanService.getAllPlans());
+    public ResponseEntity<Page<LoadingPlanResponse>> getPlans(@PageableDefault(size = 10, sort = "id") Pageable pageable){
+        return ResponseEntity.ok(loadingPlanService.getAllPlans(pageable));
     }
 
     @GetMapping("/plan-loads/{id}")

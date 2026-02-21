@@ -1,5 +1,6 @@
 package pl.ignacy.loadoptimiser.service;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import pl.ignacy.loadoptimiser.dto.PackageRequest;
@@ -14,6 +15,7 @@ public class PackageService {
     private final PackageRepository packageRepository;
     private final PackageMapper packageMapper;
 
+    @Transactional
     public PackageResponse createPackage(PackageRequest packageRequest){
         validatePackage(packageRequest);
         Package pack = packageMapper.toEntity(packageRequest);

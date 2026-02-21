@@ -11,11 +11,13 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import pl.ignacy.loadoptimiser.dto.LoadingPlanRequest;
 import pl.ignacy.loadoptimiser.dto.LoadingPlanResponse;
 import pl.ignacy.loadoptimiser.entity.LoadingPlan;
 import pl.ignacy.loadoptimiser.entity.Package;
 import pl.ignacy.loadoptimiser.entity.Vehicle;
+import pl.ignacy.loadoptimiser.enums.StrategyType;
 import pl.ignacy.loadoptimiser.mapper.LoadingPlanMapper;
 import pl.ignacy.loadoptimiser.repository.LoadingPlanRepository;
 import pl.ignacy.loadoptimiser.repository.PackageRepository;
@@ -52,13 +54,13 @@ public class LoadingPlanServiceTest {
     private LoadingPlanResponse loadingPlanResponse;
 
     private LoadingPlanService service;
-    private Map<String, LoadOptimiserStrategy> strategies;
+    private Map<StrategyType, LoadOptimiserStrategy> strategies;
 
     @BeforeEach
     void setUp() {
         strategies = new HashMap<>();
-        strategies.put("greedy", greedyStrategy);
-        strategies.put("firstfit", firstFitStrategy);
+        strategies.put(StrategyType.GREEDY, greedyStrategy);
+        strategies.put(StrategyType.FIRSTFIT, firstFitStrategy);
 
         service = new LoadingPlanService(loadingPlanRepository, vehicleRepository,
                 packageRepository, loadingPlanMapper, strategies);
@@ -80,24 +82,16 @@ public class LoadingPlanServiceTest {
             when(loadingPlanRepository.save(any())).thenAnswer(inv -> inv.getArgument(0));
             when(loadingPlanMapper.toResponse(any())).thenReturn(loadingPlanResponse);
 
-            var result = service.createPlan(new LoadingPlanRequest(List.of(1L), List.of(1L), "greedy"));
+            var result = service.createPlan(new LoadingPlanRequest(List.of(1L), List.of(1L), StrategyType.GREEDY));
 
             assertThat(result).hasSize(1);
         }
 
         @Test
-        void shouldThrowWhenStrategyUnknown() {
-            LoadingPlanRequest request = new LoadingPlanRequest(List.of(), List.of(), "unknown");
-
-            assertThatThrownBy(() -> service.createPlan(request))
-                    .isInstanceOf(IllegalArgumentException.class)
-                    .hasMessageContaining("Unknown strategy");
-        }
-        @Test
         void shouldThrowWhenVehicleMissing(){
 
             when(vehicleRepository.findAllById(any())).thenReturn(List.of());
-            LoadingPlanRequest request = new LoadingPlanRequest(List.of(1L), List.of(), "greedy");
+            LoadingPlanRequest request = new LoadingPlanRequest(List.of(1L), List.of(), StrategyType.GREEDY);
             assertThatThrownBy(() -> service.createPlan(request))
                     .isInstanceOf(EntityNotFoundException.class);
         }
@@ -125,7 +119,7 @@ public class LoadingPlanServiceTest {
 
             when(packageRepository.findAllById(any())).thenReturn(List.of(pack));
 
-            List<LoadingPlanResponse> result = service.createPlan(new LoadingPlanRequest(List.of(), List.of(1L), "greedy"));
+            List<LoadingPlanResponse> result = service.createPlan(new LoadingPlanRequest(List.of(), List.of(1L), StrategyType.GREEDY));
 
             assertThat(result).isEmpty();
             verify(greedyStrategy, never()).calculateLoad(any(), any());
@@ -137,7 +131,7 @@ public class LoadingPlanServiceTest {
             when(packageRepository.findAllById(any())).thenReturn(List.of(new Package()));
             when(greedyStrategy.calculateLoad(any(), any())).thenReturn(Map.of());
 
-            List<LoadingPlanResponse> result = service.createPlan(new LoadingPlanRequest(List.of(1L), List.of(1L), "greedy"));
+            List<LoadingPlanResponse> result = service.createPlan(new LoadingPlanRequest(List.of(1L), List.of(1L), StrategyType.GREEDY));
 
             assertThat(result).isEmpty();
         }
@@ -155,7 +149,7 @@ public class LoadingPlanServiceTest {
             when(loadingPlanRepository.save(any())).thenAnswer(inv -> inv.getArgument(0));
             when(loadingPlanMapper.toResponse(any())).thenReturn(loadingPlanResponse);
 
-            List<LoadingPlanResponse> result = service.createPlan(new LoadingPlanRequest(List.of(1L, 2L), List.of(1L, 2L), "greedy"));
+            List<LoadingPlanResponse> result = service.createPlan(new LoadingPlanRequest(List.of(1L, 2L), List.of(1L, 2L), StrategyType.GREEDY));
 
             assertThat(result).hasSize(2);
             verify(loadingPlanRepository, times(2)).save(any());
@@ -172,7 +166,7 @@ public class LoadingPlanServiceTest {
             when(loadingPlanRepository.save(any())).thenAnswer(inv -> inv.getArgument(0));
             when(loadingPlanMapper.toResponse(any())).thenReturn(loadingPlanResponse);
 
-            service.createPlan(new LoadingPlanRequest(List.of(1L), List.of(1L), "greedy"));
+            service.createPlan(new LoadingPlanRequest(List.of(1L), List.of(1L), StrategyType.GREEDY));
 
             ArgumentCaptor<LoadingPlan> planCaptor = ArgumentCaptor.forClass(LoadingPlan.class);
             verify(loadingPlanRepository).save(planCaptor.capture());
@@ -220,7 +214,8 @@ public class LoadingPlanServiceTest {
             when(loadingPlanRepository.findAll(any(PageRequest.class))).thenReturn(page);
             when(loadingPlanMapper.toResponse(plan)).thenReturn(loadingPlanResponse);
 
-            Page<LoadingPlanResponse> result = service.getAllPlans();
+            Pageable pageable = PageRequest.of(0,10);
+            Page<LoadingPlanResponse> result = service.getAllPlans(pageable);
 
             assertThat(result.getContent()).hasSize(1);
             verify(loadingPlanRepository).findAll(PageRequest.of(0, 10));
