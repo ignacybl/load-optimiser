@@ -18,6 +18,20 @@ services:
       retries: 5
       start_period: 5s
 
+  redis:
+    image: redis:latest
+    container_name: load-optimiser_redis
+    ports:
+      - "6379:6379"
+
+  redis-insight:
+    image: redis/redisinsight:latest
+    container_name: load-optimiser_redis_insight
+    ports:
+      - "8001:5540"
+    depends_on:
+      - redis
+
   app:
     build: .
     container_name: load-optimiser_app
@@ -29,7 +43,9 @@ services:
       SPRING_DATASOURCE_USERNAME: user
       SPRING_DATASOURCE_PASSWORD: password
       SPRING_DATASOURCE_DRIVER-CLASS-NAME: org.postgresql.Driver
-      SPRING_JPA_HIBERNATE_DDL-AUTO: update
+      SPRING_JPA_HIBERNATE_DDL-AUTO: validate
+      SPRING_DATA_REDIS_HOST: redis
+      SPRING_DATA_REDIS_PORT: 6379
     ports:
       - "8080:8080"
 
