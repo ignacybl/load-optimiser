@@ -18,7 +18,7 @@ public class LoadingPlan {
     @ManyToOne
     @JoinColumn(name = "vehicle_id")
     private Vehicle vehicle;
-    @OneToMany(mappedBy = "loadingPlan", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "loadingPlan")
     private List<Package> packages = new ArrayList<>();
     private LocalDateTime createdAt = LocalDateTime.now();
 }

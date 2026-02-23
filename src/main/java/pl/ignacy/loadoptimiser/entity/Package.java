@@ -12,6 +12,8 @@ public class Package {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
+    @Version
+    private Long version;
     @Column(nullable = false)
     private double weight;
     @Column(nullable = false)

@@ -7,6 +7,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
+import org.springframework.retry.annotation.Backoff;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
 import pl.ignacy.loadoptimiser.dto.LoadingPlanRequest;
 import pl.ignacy.loadoptimiser.dto.LoadingPlanResponse;
@@ -37,6 +40,7 @@ public class LoadingPlanService {
 
 
     @Transactional
+    @Retryable(retryFor = {ObjectOptimisticLockingFailureException.class}, maxAttempts = 3, backoff = @Backoff(delay = 100))
     public List<LoadingPlanResponse> createPlan(LoadingPlanRequest request){
         LoadOptimiserStrategy strategy = fetchStrategy(request.strategyType());
         List<Vehicle> vehicles = fetchVehicles(request.vehicleIds());
