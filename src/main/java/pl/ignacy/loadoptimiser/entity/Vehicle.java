@@ -14,6 +14,12 @@ public class Vehicle {
     private Long id;
     @Column(name = "plate_number", unique = true, nullable = false)
     String plateNumber;
+    @Column(nullable = false)
+    private double length;
+    @Column(nullable = false)
+    private double width;
+    @Column(nullable = false)
+    private double height;
     @Column(name = "max_weight", nullable = false)
     private double maxWeight;
     @Column(name = "max_volume", nullable = false)

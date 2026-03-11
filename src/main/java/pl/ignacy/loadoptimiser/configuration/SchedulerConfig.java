@@ -15,6 +15,5 @@ public class SchedulerConfig {
     @Bean
     public LockProvider lockProvider(RedisConnectionFactory connectionFactory){
         return new RedisLockProvider(connectionFactory, "load-optimiser-locks");
-
     }
 }

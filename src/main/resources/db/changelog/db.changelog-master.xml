@@ -21,5 +21,41 @@
             </column>
         </createTable>
     </changeSet>
+    <changeSet id="20240523-2" author="ignacy">
+        <addColumn tableName="packages">
+            <column name="length" type="double precision" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+            <column name="width" type="double precision" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+            <column name="height" type="double precision" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+
+        <addColumn tableName="packages">
+            <column name="fragile" type="boolean" defaultValueBoolean="false"/>
+            <column name="weight_capacity" type="double precision" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+            <column name="package_category" type="varchar(255)"/>
+        </addColumn>
+    </changeSet>
+    <changeSet id="20260225-3" author="ignacy">
+        <addColumn tableName="vehicles">
+            <column name="length" type="double precision" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+            <column name="width" type="double precision" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+            <column name="height" type="double precision" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+
 
 </databaseChangeLog>
