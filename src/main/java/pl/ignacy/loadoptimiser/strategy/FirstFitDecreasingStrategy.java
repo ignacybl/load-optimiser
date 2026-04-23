@@ -1,9 +1,9 @@
 package pl.ignacy.loadoptimiser.strategy;
 
 import org.springframework.stereotype.Component;
+import pl.ignacy.load_optimiser_common.enums.StrategyType;
 import pl.ignacy.loadoptimiser.entity.Package;
 import pl.ignacy.loadoptimiser.entity.Vehicle;
-import pl.ignacy.loadoptimiser.enums.StrategyType;
 
 import java.util.Comparator;
 import java.util.List;

@@ -1,11 +1,8 @@
 package pl.ignacy.loadoptimiser.configuration;
 
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import pl.ignacy.loadoptimiser.enums.StrategyType;
-import pl.ignacy.loadoptimiser.strategy.FirstFitDecreasingStrategy;
-import pl.ignacy.loadoptimiser.strategy.GreedyStrategy;
+import pl.ignacy.load_optimiser_common.enums.StrategyType;
 import pl.ignacy.loadoptimiser.strategy.LoadOptimiserStrategy;
 
 import java.util.EnumMap;

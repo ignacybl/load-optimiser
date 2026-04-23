@@ -1,9 +1,9 @@
 package pl.ignacy.loadoptimiser.strategy;
 
 import org.springframework.stereotype.Component;
+import pl.ignacy.load_optimiser_common.enums.StrategyType;
 import pl.ignacy.loadoptimiser.entity.Package;
 import pl.ignacy.loadoptimiser.entity.Vehicle;
-import pl.ignacy.loadoptimiser.enums.StrategyType;
 
 import java.util.*;
 
@@ -76,7 +76,6 @@ public class SmartStrategy implements LoadOptimiserStrategy{
         double currentVolume = alreadyPacked.stream().mapToDouble(Package::getVolume).sum();
         double volumeEfficiency = currentVolume/v.getMaxVolume();
         score += volumeEfficiency * 10;
-        score += pkg.getPriority().ordinal() * 5;
 
         return score;
     }

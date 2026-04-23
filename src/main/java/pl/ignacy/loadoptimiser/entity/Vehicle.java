@@ -3,7 +3,7 @@ package pl.ignacy.loadoptimiser.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import pl.ignacy.loadoptimiser.enums.VehicleType;
+import pl.ignacy.load_optimiser_common.enums.VehicleType;
 
 @Entity
 @Table(name = "vehicles")

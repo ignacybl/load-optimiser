@@ -1,10 +1,9 @@
 package pl.ignacy.loadoptimiser.entity;
-
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import pl.ignacy.loadoptimiser.enums.PackageCategory;
-import pl.ignacy.loadoptimiser.enums.Priority;
+import pl.ignacy.load_optimiser_common.enums.PackageCategory;
+import pl.ignacy.load_optimiser_common.enums.Priority;
 
 @Entity
 @Table(name = "packages")

@@ -2,7 +2,7 @@ package pl.ignacy.loadoptimiser.mapper;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import pl.ignacy.loadoptimiser.dto.LoadingPlanResponse;
+import pl.ignacy.load_optimiser_common.dto.LoadingPlanResponse;
 import pl.ignacy.loadoptimiser.entity.LoadingPlan;
 import pl.ignacy.loadoptimiser.entity.Package;
 

@@ -1,8 +1,8 @@
 package pl.ignacy.loadoptimiser.strategy;
 
+import pl.ignacy.load_optimiser_common.enums.StrategyType;
 import pl.ignacy.loadoptimiser.entity.Package;
 import pl.ignacy.loadoptimiser.entity.Vehicle;
-import pl.ignacy.loadoptimiser.enums.StrategyType;
 
 import java.util.List;
 import java.util.Map;

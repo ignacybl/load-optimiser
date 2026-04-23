@@ -1,8 +1,8 @@
 package pl.ignacy.loadoptimiser.mapper;
 
 import org.mapstruct.Mapper;
-import pl.ignacy.loadoptimiser.dto.PackageRequest;
-import pl.ignacy.loadoptimiser.dto.PackageResponse;
+import pl.ignacy.load_optimiser_common.dto.PackageRequest;
+import pl.ignacy.load_optimiser_common.dto.PackageResponse;
 import pl.ignacy.loadoptimiser.entity.Package;
 
 @Mapper(componentModel = "spring")

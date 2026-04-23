@@ -8,8 +8,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import pl.ignacy.loadoptimiser.dto.PackageRequest;
-import pl.ignacy.loadoptimiser.dto.PackageResponse;
+
+import pl.ignacy.load_optimiser_common.dto.PackageRequest;
+import pl.ignacy.load_optimiser_common.dto.PackageResponse;
 import pl.ignacy.loadoptimiser.service.PackageService;
 
 @RestController

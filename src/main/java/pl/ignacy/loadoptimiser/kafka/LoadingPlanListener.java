@@ -5,11 +5,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.DltHandler;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
-import org.springframework.kafka.support.KafkaHeaders;
-import org.springframework.messaging.handler.annotation.Header;
+import org.springframework.kafka.support.Acknowledgment;
 import org.springframework.stereotype.Component;
-import pl.ignacy.loadoptimiser.dto.LoadingPlanRequest;
-import pl.ignacy.loadoptimiser.dto.LoadingPlanResponse;
+import pl.ignacy.load_optimiser_common.dto.LoadingPlanRequest;
+import pl.ignacy.load_optimiser_common.dto.LoadingPlanResponse;
 import pl.ignacy.loadoptimiser.service.LoadingPlanService;
 
 import java.util.List;
@@ -22,18 +21,21 @@ public class LoadingPlanListener {
     private final KafkaTemplate<String, Object> kafkaTemplate;
 
     @KafkaListener(topics = "loading-plan-requests", groupId = "load-optimiser-group")
-    public void handleLoadingPlanRequest(LoadingPlanRequest loadingPlanRequest){
-        log.info("New request by Kafka. Strategy: {}", loadingPlanRequest.strategyType());
+    public void handleLoadingPlanRequest(LoadingPlanRequest request, Acknowledgment ack) {
+        log.info("Processing request: {}", request.strategyType());
 
-        List<LoadingPlanResponse> responses = loadingPlanService.createPlan(loadingPlanRequest);
-        for(LoadingPlanResponse response: responses) {
-            kafkaTemplate.send("loading-plan-results", response);
+        try {
+            List<LoadingPlanResponse> responses = loadingPlanService.createPlan(request);
+
+            for (LoadingPlanResponse response : responses) {
+                kafkaTemplate.send("loading-plan-results", response).get();
+            }
+            ack.acknowledge();
+
+        } catch (Exception e) {
+            log.error("Error processing message", e);
+
         }
-        log.info("Plan has been created and sent on topic - results");
+    }
 
-    }
-    @DltHandler
-    public void handleDlt(LoadingPlanRequest data, @Header(KafkaHeaders.RECEIVED_TOPIC) String topic) {
-        log.error("Data from topic: {} has been transferred to DLT: {}", topic, data);
-    }
 }

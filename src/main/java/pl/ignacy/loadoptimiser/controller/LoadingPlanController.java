@@ -1,5 +1,6 @@
 package pl.ignacy.loadoptimiser.controller;
 
+import pl.ignacy.load_optimiser_common.dto.LoadingPlanRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -8,8 +9,8 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import pl.ignacy.loadoptimiser.dto.LoadingPlanRequest;
-import pl.ignacy.loadoptimiser.dto.LoadingPlanResponse;
+
+import pl.ignacy.load_optimiser_common.dto.LoadingPlanResponse;
 import pl.ignacy.loadoptimiser.service.LoadingPlanService;
 
 import java.util.List;

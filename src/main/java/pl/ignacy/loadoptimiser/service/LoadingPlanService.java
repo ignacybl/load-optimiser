@@ -1,6 +1,6 @@
 package pl.ignacy.loadoptimiser.service;
 
-import jakarta.annotation.PostConstruct;
+
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -11,12 +11,12 @@ import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.retry.annotation.Backoff;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
-import pl.ignacy.loadoptimiser.dto.LoadingPlanRequest;
-import pl.ignacy.loadoptimiser.dto.LoadingPlanResponse;
+import pl.ignacy.load_optimiser_common.dto.LoadingPlanRequest;
+import pl.ignacy.load_optimiser_common.dto.LoadingPlanResponse;
+import pl.ignacy.load_optimiser_common.enums.StrategyType;
 import pl.ignacy.loadoptimiser.entity.LoadingPlan;
 import pl.ignacy.loadoptimiser.entity.Package;
 import pl.ignacy.loadoptimiser.entity.Vehicle;
-import pl.ignacy.loadoptimiser.enums.StrategyType;
 import pl.ignacy.loadoptimiser.mapper.LoadingPlanMapper;
 import pl.ignacy.loadoptimiser.repository.LoadingPlanRepository;
 import pl.ignacy.loadoptimiser.repository.PackageRepository;
@@ -24,7 +24,6 @@ import pl.ignacy.loadoptimiser.repository.VehicleRepository;
 import pl.ignacy.loadoptimiser.strategy.LoadOptimiserStrategy;
 
 import java.util.ArrayList;
-import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
